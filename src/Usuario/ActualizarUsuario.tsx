@@ -1,0 +1,321 @@
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import { Usuario } from "../tipos/Usuario";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+interface Props {
+  user: Usuario;
+}
+
+const SignUp: React.FC<Props> = ({ user }: Props) => {
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = React.useState<string | null>(null);
+  const [currentPassword, setCurrentPassword] = React.useState<string>('');
+  const [newPassword, setNewPassword] = React.useState<string>('');
+  const [confirmNewPassword, setConfirmNewPassword] = React.useState<string>('');
+  const [errorMessage, setErrorMessage] = React.useState<string>('');
+  const [successMessage, setSuccessMessage] = React.useState<string>('');
+  const [imageSuccessMessage, setImageSuccessMessage] = React.useState<string>('');
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [dialogAction, setDialogAction] = React.useState<() => void>(() => {});
+  const [nombreUsuario, setNombreUsuario] = React.useState(user.nombreUsuario);
+  const [cedula, setCedula] = React.useState(user.cedula);
+  const [correoElectronico, setCorreoElectronico] = React.useState(user.correoElectronico);
+  const [numeroTelefono, setNumeroTelefono] = React.useState(user.numeroTelefono);
+
+  const handleOpenDialog = (action: () => void) => {
+    setDialogAction(() => action);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const id = user.id;
+      const response = await axios.post(`http://localhost:1111/barber_shop_booking_hub/cuenta/actualizar?id=${id}`, {
+        nombreUsuario,
+        cedula,
+        correoElectronico,
+        numeroTelefono
+      });
+      console.log(response.data);
+      const updatedUser = response.data;
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      window.location.reload();
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+
+  const handleImageSubmit = async () => {
+    if (!selectedFile) return;
+
+    const formData = new FormData();
+    formData.append('id', user.id.toString());
+    formData.append('imagen', selectedFile);
+
+    try {
+      const response = await axios.post(`http://localhost:1111/barber_shop_booking_hub/cuenta/actualizarImagen`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(response.data);
+      const imageUrl = response.data.url;
+      setImageSuccessMessage('Imagen actualizada exitosamente.');
+      const updatedUser = { ...user, imagen: imageUrl };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      window.location.reload();
+    } catch (error) {
+      console.error('Error updating user image:', error);
+      setImageSuccessMessage('');
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      if (!['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension || '')) {
+        setErrorMessage('Solo se permiten archivos .jpg, .jpeg, .png y .gif.');
+        setSelectedFile(null);
+        setImagePreviewUrl(null);
+        return;
+      }
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      setErrorMessage(''); // Clear any previous error messages
+    } else {
+      setSelectedFile(null);
+      setImagePreviewUrl(null);
+    }
+  };
+
+  const handlePasswordChange = async () => {
+    if (newPassword !== confirmNewPassword) {
+      setErrorMessage('Las nuevas contraseñas no coinciden.');
+      setSuccessMessage('');
+      return;
+    }
+
+    try {
+      const response = await axios.post(`http://localhost:1111/barber_shop_booking_hub/cuenta/cambiarContrasena`, null, {
+        params: {
+          id: user.id,
+          contrasenaActual: currentPassword,
+          contrasenaNueva: newPassword,
+        },
+      });
+      console.log(response.data);
+      setErrorMessage('');
+      setSuccessMessage('Contraseña actualizada exitosamente.');
+    } catch (error) {
+      console.error('Error updating password:', error);
+      setErrorMessage('Error al actualizar la contraseña. Verifique su contraseña actual.');
+      setSuccessMessage('');
+    }
+  };
+
+  return (
+    <ThemeProvider theme={createTheme()}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Actualiza tu Información
+          </Typography>
+          <Box component="form" noValidate sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="nombreUsuario"
+                  label="Nombre de Usuario"
+                  name="nombreUsuario"
+                  value={nombreUsuario}
+                  onChange={(e) => setNombreUsuario(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="cedula"
+                  label="Cédula"
+                  name="cedula"
+                  value={cedula}
+                  onChange={(e) => setCedula(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="correoElectronico"
+                  label="Correo Electrónico"
+                  name="correoElectronico"
+                  value={correoElectronico}
+                  onChange={(e) => setCorreoElectronico(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="numeroTelefono"
+                  label="Número de Teléfono"
+                  name="numeroTelefono"
+                  value={numeroTelefono}
+                  onChange={(e) => setNumeroTelefono(e.target.value)}
+                />
+              </Grid>
+              <input type="hidden" name="id" value={user.id} />
+            </Grid>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={() => handleOpenDialog(handleSubmit)}
+            >
+              Actualizar Información
+            </Button>
+          </Box>
+          <Typography component="h2" variant="h6" sx={{ mt: 4 }}>
+            Actualiza tu Imagen
+          </Typography>
+          {imagePreviewUrl && (
+            <Avatar
+              alt="User Image"
+              src={imagePreviewUrl}
+              sx={{ width: 100, height: 100, mt: 2 }}
+            />
+          )}
+          {imageSuccessMessage && (
+            <Typography color="success" sx={{ mt: 1 }}>
+              {imageSuccessMessage}
+            </Typography>
+          )}
+          <input
+            accept="image/*"
+            type="file"
+            onChange={handleImageChange}
+            style={{ marginTop: 16 }}
+          />
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ mt: 2 }}
+            onClick={() => handleOpenDialog(handleImageSubmit)}
+          >
+            Actualizar Imagen
+          </Button>
+          <Typography component="h2" variant="h6" sx={{ mt: 4 }}>
+            Cambia tu Contraseña
+          </Typography>
+          {errorMessage && (
+            <Typography color="error" sx={{ mt: 1 }}>
+              {errorMessage}
+            </Typography>
+          )}
+          {successMessage && (
+            <Typography color="success" sx={{ mt: 1 }}>
+              {successMessage}
+            </Typography>
+          )}
+          <TextField
+            fullWidth
+            label="Contraseña Actual"
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            sx={{ mt: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="Nueva Contraseña"
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            sx={{ mt: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="Confirmar Nueva Contraseña"
+            type="password"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+            sx={{ mt: 2 }}
+          />
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ mt: 2 }}
+            onClick={() => handleOpenDialog(handlePasswordChange)}
+          >
+            Actualizar Contraseña
+          </Button>
+        </Box>
+      </Container>
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Confirmación</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            ¿Estás seguro de que deseas realizar esta acción?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancelar</Button>
+          <Button
+            onClick={() => {
+              dialogAction(); // Ejecuta la acción correspondiente
+              handleCloseDialog();
+            }}
+            autoFocus
+          >
+            Confirmar
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </ThemeProvider>
+  );
+}
+
+export default SignUp;
+

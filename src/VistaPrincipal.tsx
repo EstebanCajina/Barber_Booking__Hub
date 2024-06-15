@@ -20,9 +20,10 @@ function MainView() {
   }, [activeIndex]);
 
   return (
+    <div>
     <div id="carouselExampleInterval" className="carousel slide carousel-fade" data-bs-ride="carousel">
       <div className="carousel-inner">
-      <div className={`carousel-item ${activeIndex === 0 ? 'active' : ''} carousel-item-next`} data-bs-interval="3000">
+        <div className={`carousel-item ${activeIndex === 0 ? 'active' : ''} carousel-item-next`} data-bs-interval="3000">
           <div className="card text-bg-dark" style={{ width: '100%', height: '100%' }}>
             <img src="https://e1.pxfuel.com/desktop-wallpaper/793/233/desktop-wallpaper-barber-shop.jpg" className="card-img" alt="..." style={{ width: '100%', maxHeight: '700px', objectFit: 'cover', objectPosition: 'center' }} />
             <div className="card-img-overlay d-flex flex-column justify-content-center align-items-center position-absolute top-0 start-0">
@@ -30,10 +31,12 @@ function MainView() {
                 <h5 className="card-title display-3 text-white fw-bold">¡Bienvenido a nuestra barbería 1!</h5>
                 <p className="card-text lead text-white fw-bold">Ofrecemos cortes de cabello y afeitados de alta calidad para hombres de todas las edades.</p>
                 <p className="card-text lead fw-bold"><small className="text-white">Atendido por expertos en el arte de la barbería</small></p>
+                <p className="card-text lead fw-bold">Yo amo Copilot</p> {/* Agrega el texto "Yo amo Copilot" */}
               </div>
             </div>
           </div>
         </div>
+        {/* Repite el mismo patrón para las otras tarjetas */}
         <div className={`carousel-item ${activeIndex === 1 ? 'active' : ''} carousel-item-next`} data-bs-interval="3000">
           <div className="card text-bg-dark" style={{ width: '100%', height: '100%' }}>
             <img src="https://tevian.com/wp-content/uploads/2016/03/Disen%CC%83o-sin-ti%CC%81tulo-2-scaled-e1627461964712.jpg" className="card-img" alt="..." style={{ width: '100%', maxHeight: '700px', objectFit: 'cover', objectPosition: 'center' }} />
@@ -67,6 +70,15 @@ function MainView() {
         <span className="carousel-control-next-icon" aria-hidden="true"></span>
         <span className="visually-hidden">Next</span>
       </button>
+
+    </div>
+    {/* un div con un margin top de 30px, con un texto explicando la pagina y con estilos atractivos*/ }
+    <div className="text-center mt-5">
+      <h1 className="display-1 fw-bold">¡Bienvenido a nuestra barbería!</h1>
+      <p className="lead fw-bold">Ofrecemos cortes de cabello y afeitados de alta calidad para hombres de todas las edades.</p>
+      <p className="lead fw-bold">Atendido por expertos en el arte de la barbería</p>
+      </div>
+    
     </div>
   );
 }

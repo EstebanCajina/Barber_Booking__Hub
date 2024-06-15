@@ -1,6 +1,6 @@
 import React from 'react';
-import TarjetaImagen from './TarjetaImagen';
-import CarruselImagen from "./CarruselImagen";
+import TarjetaImagen from '../componentes/TarjetaImagen';
+import CarruselImagen from "../componentes/CarruselImagen";
 
 interface Image {
   label: string;

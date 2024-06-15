@@ -1,34 +1,47 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import NavBar from "./NavBar"; // Importa el componente NavBar
-import VistaUsuario from "./VistaUsuario";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import NavBar from "./componentes/NavBar";
+import VistaUsuario from "./Usuario/VistaUsuario";
 import VistaServicios from "./VistaServicios";
 import VistaPrincipal from "./VistaPrincipal";
-import Login from "./Login";
-import Registrar from "./Registrarse";
-import VistaCuenta from "./VistaCuenta";
-
-
-
+import Login from "./Usuario/Login";
+import Registrar from "./Usuario/Registrarse";
+import VistaCuenta from "./Usuario/VistaCuenta";
+import Recuperacion from "./Usuario/Recuperacion";
+import { Usuario } from "./tipos/Usuario";
 
 
 const App: React.FC = () => {
+  const [usuario, setUser] = useState<Usuario | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    window.location.href = '/barber_shop_booking_hub/login';
+  };
+
   return (
-    <Router basename="/barber_shop_booking_hub"> {/* Define el basename */}
-      <NavBar /> {/* NavBar siempre presente */}
+    <Router basename="/barber_shop_booking_hub">
+      <NavBar onLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<VistaPrincipal />} />
-        <Route path="/perfil" element={<VistaUsuario />} />
-        <Route path="/servicios" element={<VistaServicios />} /> {/* Remove the 'loading' prop */}
-        <Route path="/login" element={<Login />} /> {/* Change the component name to 'Registrar' */}
-        <Route path="/registrarse" element={<Registrar />} /> {/* Change the component name to 'Registrar' */}
-        <Route path="/cuenta" element={<VistaCuenta />} /> {/* Remove the extra closing angle bracket '>' */}
-      
+        <Route path="/perfil" element={usuario ? <VistaUsuario /> : <Login />} />
+        <Route path="/servicios" element={<VistaServicios/>}/>
+        <Route path="/login" element={<Login />} />
+        <Route path="/registrarse" element={<Registrar />} />
+        <Route path="/recuperacion" element={<Recuperacion />} />
+        <Route path="/cuenta" element={usuario ? <VistaCuenta /> : <Login />} />
         {/* Otras rutas de tu aplicación */}
       </Routes>
     </Router>
   );
 };
-
 
 export default App;
