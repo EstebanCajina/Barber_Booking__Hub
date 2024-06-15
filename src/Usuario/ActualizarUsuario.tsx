@@ -20,6 +20,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface Props {
   user: Usuario;
 }
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 const SignUp: React.FC<Props> = ({ user }: Props) => {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -138,7 +143,7 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
   };
 
   return (
-    <ThemeProvider theme={createTheme()}>
+    <ThemeProvider theme={darkTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -149,7 +154,7 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'error.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -164,6 +169,7 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
                   id="nombreUsuario"
                   label="Nombre de Usuario"
                   name="nombreUsuario"
+                  color="error"
                   value={nombreUsuario}
                   onChange={(e) => setNombreUsuario(e.target.value)}
                 />
@@ -175,6 +181,7 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
                   id="cedula"
                   label="Cédula"
                   name="cedula"
+                  color="error"
                   value={cedula}
                   onChange={(e) => setCedula(e.target.value)}
                 />
@@ -186,6 +193,7 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
                   id="correoElectronico"
                   label="Correo Electrónico"
                   name="correoElectronico"
+                  color="error"
                   value={correoElectronico}
                   onChange={(e) => setCorreoElectronico(e.target.value)}
                 />
@@ -197,6 +205,7 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
                   id="numeroTelefono"
                   label="Número de Teléfono"
                   name="numeroTelefono"
+                  color="error"
                   value={numeroTelefono}
                   onChange={(e) => setNumeroTelefono(e.target.value)}
                 />
@@ -206,6 +215,7 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
             <Button
               fullWidth
               variant="contained"
+              color="error"
               sx={{ mt: 3, mb: 2 }}
               onClick={() => handleOpenDialog(handleSubmit)}
             >
@@ -236,19 +246,21 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
           <Button
             variant="contained"
             fullWidth
+            color="error"
             sx={{ mt: 2 }}
             onClick={() => handleOpenDialog(handleImageSubmit)}
           >
             Actualizar Imagen
           </Button>
-          <Typography component="h2" variant="h6" sx={{ mt: 4 }}>
-            Cambia tu Contraseña
-          </Typography>
           {errorMessage && (
-            <Typography color="error" sx={{ mt: 1 }}>
+            <Typography color="secondary" sx={{ mt: 1 }}>
               {errorMessage}
             </Typography>
           )}
+          <Typography component="h2" variant="h6" sx={{ mt: 4 }}>
+            Cambia tu Contraseña
+          </Typography>
+          
           {successMessage && (
             <Typography color="success" sx={{ mt: 1 }}>
               {successMessage}
@@ -258,6 +270,7 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
             fullWidth
             label="Contraseña Actual"
             type="password"
+            color="error"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             sx={{ mt: 2 }}
@@ -266,6 +279,7 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
             fullWidth
             label="Nueva Contraseña"
             type="password"
+            color="error"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             sx={{ mt: 2 }}
@@ -274,6 +288,7 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
             fullWidth
             label="Confirmar Nueva Contraseña"
             type="password"
+            color="error"
             value={confirmNewPassword}
             onChange={(e) => setConfirmNewPassword(e.target.value)}
             sx={{ mt: 2 }}
@@ -281,6 +296,7 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
           <Button
             variant="contained"
             fullWidth
+            color="error"
             sx={{ mt: 2 }}
             onClick={() => handleOpenDialog(handlePasswordChange)}
           >

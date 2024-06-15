@@ -50,7 +50,7 @@ export default function SignInSide() {
       }
 
       localStorage.setItem('user', JSON.stringify(response.data));
-      window.location.href = '/barber_shop_booking_hub';
+      window.location.href = '/';
     } catch (error) {
       console.error('Error iniciando sesión:', error);
       setError('Credenciales inválidas.');
@@ -69,7 +69,7 @@ export default function SignInSide() {
         component="main"
         sx={{
           height: '100vh',
-          background: 'linear-gradient(90deg, rgba(138,13,123,1) 0%, rgba(8,212,224,1) 52%, rgba(138,13,123,1) 100%)',
+          background: '#1a1a1a',
           justifyContent: 'center',
           alignItems: 'center',
         }}
@@ -84,7 +84,7 @@ export default function SignInSide() {
               p: 4,
               boxShadow: 3,
               borderRadius: 2,
-              background: 'linear-gradient(94deg, rgba(0,0,0,1) 0%, rgba(85,29,61,1) 55%, rgba(210,202,31,1) 100%)', // Ajusta la transparencia aquí
+              backgroundColor: '#1a1a1a', // Ajusta la transparencia aquí
             }} square >
           <Box
             sx={{
@@ -96,10 +96,10 @@ export default function SignInSide() {
               p: 4,
               boxShadow: 3,
               borderRadius: 2,
-              backgroundColor: 'rgba(255, 255, 255, 0.8)', // Ajusta la transparencia aquí
+              backgroundColor: 'rgba(255, 255, 255, 0.99)', // Ajusta la transparencia aquí
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: 'error.main' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -115,6 +115,7 @@ export default function SignInSide() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                color="error"
                 onChange={handleChange}
               />
               <TextField
@@ -125,13 +126,11 @@ export default function SignInSide() {
                 label="Contraseña"
                 type="password"
                 id="password"
+                color="error"
                 autoComplete="current-password"
                 onChange={handleChange}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Recuérdame"
-              />
+              
               {error && (
                 <Typography color="error" variant="body2" align="center" sx={{ mt: 1 }}>
                   {error}
@@ -141,18 +140,19 @@ export default function SignInSide() {
                 type="submit"
                 fullWidth
                 variant="contained"
+                color="error"
                 sx={{ mt: 3, mb: 2 }}
               >
                 Iniciar sesión
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="recuperacion" variant="body2">
+                  <Link href="recuperacion" variant="body2" color="error">
                     ¿Has olvidado tu contraseña?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="registrarse" variant="body2">
+                  <Link href="registrarse" variant="body2" color="error">
                     {"¿No tienes una cuenta? Inscríbete aquí"}
                   </Link>
                 </Grid>

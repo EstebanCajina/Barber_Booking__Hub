@@ -57,7 +57,7 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout }) => {
     };
 
     return (
-        <AppBar position="static" sx={{ background: 'linear-gradient(94deg, rgba(0,0,0,1) 0%, rgba(85,29,61,1) 55%, rgba(210,202,31,1) 100%)' }}>
+        <AppBar position="static" sx={{ background: ' linear-gradient(90deg, rgba(144,14,17,1) 0%, rgba(0,0,0,1) 20%, rgba(26,26,26,1) 80%, rgba(144,14,17,1) 100%)' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Avatar src={logo} alt="Logo" sx={{ display: { xs: 'none', md: 'flex' }, mr: 2, width: 65, height: 65 }} />

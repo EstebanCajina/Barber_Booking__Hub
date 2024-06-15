@@ -8,15 +8,20 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 import { Usuario } from "../tipos/Usuario";
 
 interface AgregarServicioProps {
   usuario: Usuario;
 }
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
   const [nombre, setNombre] = useState("");
@@ -27,19 +32,21 @@ const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
   const [carouselKey, setCarouselKey] = useState(0);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [open, setOpen] = useState(false);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
   const handleImagenesChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const files = Array.from(event.target.files);
-      setImagenes((prevImagenes) => [...prevImagenes, ...files]);
+      const validImageTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+      const filteredFiles = files.filter(file => validImageTypes.includes(file.type));
+      setImagenes(prevImagenes => [...prevImagenes, ...filteredFiles]);
     }
   };
 
   const handleEliminarImagen = (index: number) => {
-    setImagenes((prevImagenes) => {
+    setImagenes(prevImagenes => {
       const nuevasImagenes = prevImagenes.filter((_, i) => i !== index);
-      setCarouselKey((prevKey) => prevKey + 1);
+      setCarouselKey(prevKey => prevKey + 1);
       return nuevasImagenes;
     });
   };
@@ -47,17 +54,48 @@ const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (!nombre.trim() || !descripcion.trim() || !duracion.trim() || !precioBase.trim()) {
-      setError("Todos los campos son obligatorios");
+    if (!nombre.trim()) {
+      setError("El nombre está vacío");
       return;
     }
 
-    if (isNaN(Number(duracion)) || isNaN(Number(precioBase))) {
-      setError("La duración y el precio base deben ser números");
+    if (!descripcion.trim()) {
+      setError("La descripción está vacía");
       return;
     }
 
-    const params = new URLSearchParams();
+    if (!duracion.trim()) {
+      setError("La duración está vacía");
+      return;
+    }
+
+    if (isNaN(Number(duracion)) || Number(duracion) < 1) {
+      setError("La duración debe ser un número positivo");
+      return;
+    }
+
+    if (!precioBase.trim()) {
+      setError("El precio base está vacío");
+      return;
+    }
+
+    if (isNaN(Number(precioBase)) || Number(precioBase) < 1) {
+      setError("El precio base debe ser un número positivo");
+      return;
+    }
+
+    if (imagenes.length === 0) {
+      setError("Debe seleccionar al menos una imagen válida");
+      return;
+    }
+
+    setOpenConfirmation(true);
+  };
+
+  const handleConfirmacionAceptar = async () => {
+    setOpenConfirmation(false);
+
+    const params = new FormData();
     params.append("nombre", nombre);
     params.append("descripcion", descripcion);
     params.append("duracion", duracion);
@@ -72,44 +110,44 @@ const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
       console.log("Servicio agregado:", response.data);
 
       const servicioId = response.data.id;
-      imagenes.forEach(async (imagen, index) => {
-        const imagenFormData = new FormData();
-        imagenFormData.append("id", servicioId.toString());
-        imagenFormData.append("imagen", imagen);
+      await Promise.all(
+        imagenes.map(async (imagen) => {
+          const imagenFormData = new FormData();
+          imagenFormData.append("id", servicioId.toString());
+          imagenFormData.append("imagen", imagen);
 
-        const imagenResponse = await axios.post(
-          "http://localhost:1111/barber_shop_booking_hub/servicio/actualizarImagen",
-          imagenFormData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        console.log("Imagen subida:", imagenResponse.data);
-      });
+          const imagenResponse = await axios.post(
+            "http://localhost:1111/barber_shop_booking_hub/servicio/actualizarImagen",
+            imagenFormData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          console.log("Imagen subida:", imagenResponse.data);
+        })
+      );
 
       setSuccessMessage("El servicio se agregó correctamente");
-      setOpen(true);
       setNombre("");
       setDescripcion("");
       setDuracion("");
       setPrecioBase("");
       setImagenes([]);
-
+      window.location.reload();
     } catch (error) {
       console.error("Error al agregar el servicio:", error);
       setError("Error al agregar el servicio");
     }
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    window.location.reload();
+  const handleConfirmacionCancelar = () => {
+    setOpenConfirmation(false);
   };
 
   return (
-    <ThemeProvider theme={createTheme()}>
+    <ThemeProvider theme={darkTheme}>
       <Grid
         container
         component="main"
@@ -120,7 +158,7 @@ const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
         }}
       >
         <Paper elevation={6} sx={{ p: 4, borderRadius: 2 }}>
-          <Typography component="h1" variant="h5" align="center" gutterBottom>
+          <Typography component="h1" variant="h5" align="center" color="error" gutterBottom>
             Agregar Servicio
           </Typography>
           <form onSubmit={handleSubmit} noValidate>
@@ -133,6 +171,7 @@ const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
                   id="nombre"
                   label="Nombre"
                   name="nombre"
+                  color="error"
                   value={nombre}
                   onChange={(e) => {
                     setNombre(e.target.value);
@@ -148,6 +187,7 @@ const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
                   id="descripcion"
                   label="Descripción"
                   name="descripcion"
+                  color="error"
                   value={descripcion}
                   onChange={(e) => {
                     setDescripcion(e.target.value);
@@ -162,6 +202,7 @@ const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
                   fullWidth
                   id="duracion"
                   label="Duración"
+                  color="error"
                   name="duracion"
                   value={duracion}
                   onChange={(e) => {
@@ -178,6 +219,7 @@ const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
                   id="precioBase"
                   label="Precio Base"
                   name="precioBase"
+                  color="error"
                   value={precioBase}
                   onChange={(e) => {
                     setPrecioBase(e.target.value);
@@ -252,7 +294,7 @@ const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
             </Grid>
             {error && (
               <Typography
-                color="error"
+                color="primary"
                 variant="body2"
                 align="center"
                 sx={{ mt: 2 }}
@@ -266,13 +308,14 @@ const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
                 variant="body2"
                 align="center"
                 sx={{ mt: 2 }}
-              >
+                >
                 {successMessage}
               </Typography>
             )}
             <Button
               type="submit"
               fullWidth
+              color="error"
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
@@ -280,13 +323,21 @@ const AgregarServicio: React.FC<AgregarServicioProps> = ({ usuario }) => {
             </Button>
           </form>
         </Paper>
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog
+          open={openConfirmation}
+          onClose={() => setOpenConfirmation(false)}
+        >
           <DialogTitle>Confirmación</DialogTitle>
           <DialogContent>
-            <Typography>El servicio se agregó correctamente.</Typography>
+            <Typography>
+              ¿Desea guardar el servicio?
+            </Typography>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleConfirmacionCancelar} color="primary">
+              Cancelar
+            </Button>
+            <Button onClick={handleConfirmacionAceptar} color="primary">
               Aceptar
             </Button>
           </DialogActions>

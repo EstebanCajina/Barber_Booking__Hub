@@ -14,6 +14,7 @@ import Paper from '@mui/material/Paper'; // Importa Paper
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 
+
 const SignUp: React.FC = () => {
   const [formData, setFormData] = useState({
     nombreUsuario: '',
@@ -73,7 +74,7 @@ const SignUp: React.FC = () => {
       localStorage.setItem('user', JSON.stringify(loginResponse.data));
 
       // Redirigir al usuario a la vista principal
-      window.location.href = '/barber_shop_booking_hub';
+      window.location.href = '/';
 
     } catch (error) {
       console.error('Error registrando usuario:', error);
@@ -86,8 +87,8 @@ const SignUp: React.FC = () => {
         container
         component="main"
         sx={{
-          height: '100vh',
-          background: 'linear-gradient(90deg, rgba(138,13,123,1) 0%, rgba(8,212,224,1) 52%, rgba(138,13,123,1) 100%)',
+          
+          backgroundColor: '#1a1a1a',
           justifyContent: 'center',
           alignItems: 'center',
         }}
@@ -102,7 +103,7 @@ const SignUp: React.FC = () => {
               p: 4,
               boxShadow: 3,
               borderRadius: 2,
-              background: 'linear-gradient(94deg, rgba(0,0,0,1) 0%, rgba(85,29,61,1) 55%, rgba(210,202,31,1) 100%)', // Ajusta la transparencia aquí
+              backgroundColor: '#1a1a1a', // Ajusta la transparencia aquí
             }} square >
           <Box
             sx={{
@@ -114,10 +115,10 @@ const SignUp: React.FC = () => {
               p: 4,
               boxShadow: 3,
               borderRadius: 2,
-              backgroundColor: 'rgba(255, 255, 255, 0.8)', // Ajusta la transparencia aquí
+              backgroundColor: 'rgba(255, 255, 255, 0.99)', // Ajusta la transparencia aquí
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: 'error.main' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -134,6 +135,7 @@ const SignUp: React.FC = () => {
                     name="nombreUsuario"
                     value={formData.nombreUsuario}
                     onChange={handleChange}
+                    color="error"
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -145,6 +147,7 @@ const SignUp: React.FC = () => {
                     name="cedula"
                     value={formData.cedula}
                     onChange={handleChange}
+                    color="error"
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -155,6 +158,7 @@ const SignUp: React.FC = () => {
                     label="Contraseña"
                     type="password"
                     id="contrasena"
+                    color="error"
                     value={formData.contrasena}
                     onChange={handleChange}
                   />
@@ -167,6 +171,7 @@ const SignUp: React.FC = () => {
                     label="Confirmar Contraseña"
                     type="password"
                     id="confirmarContrasena"
+                    color="error"
                     value={formData.confirmarContrasena}
                     onChange={handleChange}
                   />
@@ -178,6 +183,7 @@ const SignUp: React.FC = () => {
                     id="correoElectronico"
                     label="Correo Electrónico"
                     name="correoElectronico"
+                    color="error"
                     value={formData.correoElectronico}
                     onChange={handleChange}
                   />
@@ -189,19 +195,15 @@ const SignUp: React.FC = () => {
                     id="numeroTelefono"
                     label="Número de Teléfono"
                     name="numeroTelefono"
+                    color="error"
                     value={formData.numeroTelefono}
                     onChange={handleChange}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    control={<Checkbox name="allowExtraEmails" color="primary" />}
-                    label="Quiero recibir inspiración, promociones de marketing y actualizaciones por correo electrónico."
-                  />
-                </Grid>
+                
               </Grid>
               {error && (
-                <Typography color="error" variant="body2">
+                <Typography color="secondary" variant="body2">
                   {error}
                 </Typography>
               )}
@@ -209,13 +211,14 @@ const SignUp: React.FC = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
+                color="error"
                 sx={{ mt: 3, mb: 2 }}
               >
                 Registrarse
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link href="login" variant="body2">
+                  <Link href="login" variant="body2" color="error">
                     ¿Ya tienes una cuenta? Inicia sesión
                   </Link>
                 </Grid>

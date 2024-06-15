@@ -24,11 +24,11 @@ const App: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     setUser(null);
-    window.location.href = '/barber_shop_booking_hub/login';
+    window.location.href = '/login';
   };
 
   return (
-    <Router basename="/barber_shop_booking_hub">
+    <Router basename="/">
       <NavBar onLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<VistaPrincipal />} />

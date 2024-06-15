@@ -4,7 +4,14 @@ import { Carousel, Pagination } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ActualizarServicio from "./ActualizarServicio";
 import { Servicio } from "../tipos/Servicio";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+} from "@mui/material";
 
 const ServicioList: React.FC = () => {
   const [servicios, setServicios] = useState<Servicio[]>([]);
@@ -14,17 +21,25 @@ const ServicioList: React.FC = () => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [openDeleteConfirmDialog, setOpenDeleteConfirmDialog] = useState(false);
   const [servicioToDelete, setServicioToDelete] = useState<Servicio | null>(null);
+  const [nombreBusqueda, setNombreBusqueda] = useState('');
+  const [isFiltering, setIsFiltering] = useState(false);
   const size = 4;
   const storedUser = localStorage.getItem("user");
-  const isBarbero = storedUser && JSON.parse(storedUser).barbero === "1";
   const usuario = storedUser ? JSON.parse(storedUser) : null;
 
   useEffect(() => {
     const fetchServicios = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:1111/barber_shop_booking_hub/servicio/listar?page=${page}&size=${size}`
-        );
+        let response;
+        if (isFiltering && nombreBusqueda) {
+          response = await axios.get(
+            `http://localhost:1111/barber_shop_booking_hub/servicio/buscar?nombre=${nombreBusqueda}&page=${page}&size=${size}`
+          );
+        } else {
+          response = await axios.get(
+            `http://localhost:1111/barber_shop_booking_hub/servicio/listar?page=${page}&size=${size}`
+          );
+        }
         setServicios(response.data.content);
         setTotalPages(response.data.totalPages);
       } catch (error) {
@@ -33,10 +48,25 @@ const ServicioList: React.FC = () => {
     };
 
     fetchServicios();
-  }, [page, size]);
+  }, [page, size, isFiltering, nombreBusqueda]);
 
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNombreBusqueda(event.target.value);
+  };
+
+  const handleSearch = () => {
+    setIsFiltering(true);
+    setPage(0); // Reset to the first page
+  };
+
+  const handleShowAll = () => {
+    setIsFiltering(false);
+    setNombreBusqueda('');
+    setPage(0); // Reset to the first page
   };
 
   const handleActualizarClick = (servicio: Servicio) => {
@@ -44,7 +74,8 @@ const ServicioList: React.FC = () => {
       setSelectedServicio(servicio);
       setOpenConfirmDialog(true);
     } else {
-      alert("No tienes permisos para actualizar este servicio");
+      // Aquí podrías manejar un mensaje de error o simplemente no hacer nada si no tiene permisos
+      console.log("No tienes permisos para actualizar este servicio");
     }
   };
 
@@ -62,7 +93,8 @@ const ServicioList: React.FC = () => {
       setServicioToDelete(servicio);
       setOpenDeleteConfirmDialog(true);
     } else {
-      alert("No tienes permisos para eliminar este servicio");
+      // Aquí podrías manejar un mensaje de error o simplemente no hacer nada si no tiene permisos
+      console.log("No tienes permisos para eliminar este servicio");
     }
   };
 
@@ -73,12 +105,14 @@ const ServicioList: React.FC = () => {
           params: { id: servicioToDelete.id }
         });
         setServicios(servicios.filter(s => s.id !== servicioToDelete.id));
-        alert("Servicio eliminado correctamente");
+        console.log("Servicio eliminado correctamente");
       } catch (error) {
         console.error("Error al eliminar el servicio:", error);
-        alert("Error al eliminar el servicio");
+        console.log("Error al eliminar el servicio");
       }
       setOpenDeleteConfirmDialog(false);
+      window.location.reload();
+
     }
   };
 
@@ -88,13 +122,26 @@ const ServicioList: React.FC = () => {
 
   return (
     <div className="container py-5">
-      <h1 className="text-center mb-5">SERVICIOS</h1>
+      <h1 className="text-center mb-5 text-light">SERVICIOS</h1>
+      <div className="d-flex justify-content-center mb-4">
+        <input
+          type="text"
+          value={nombreBusqueda}
+          onChange={handleSearchChange}
+          placeholder="Buscar por nombre"
+          className="form-control mr-2"
+          style={{ width: '300px' }}
+        />
+        <button onClick={handleSearch} className="btn btn-danger mr-2">Buscar</button>
+        <button onClick={handleShowAll} className="btn btn-primary">Mostrar todos</button>
+      </div>
       <div className="row">
         {servicios.map((servicio) => (
           <div key={servicio.id} className="col-lg-6 mb-4">
             <div className="card" style={{ height: "650px" }}>
               <div style={{ height: "500px", overflow: "hidden" }}>
-                <Carousel>
+                <Carousel data-bs-theme="ligth"
+                >
                   {servicio.imagenes.map((imagen, index) => (
                     <Carousel.Item key={index}>
                       <img
@@ -111,13 +158,13 @@ const ServicioList: React.FC = () => {
                   ))}
                 </Carousel>
               </div>
-              <div className="card-body">
-                <h5 className="card-title">{servicio.nombre}</h5>
-                <p className="card-text">{servicio.descripcion}</p>
-                <small className="text-muted">
+              <div className="card-body bg-danger">
+                <h4 className="card-title text-light">{servicio.nombre}</h4>
+                <p className="card-text text-light">{servicio.descripcion}</p>
+                <h6 className="text-light">
                   Duración: {servicio.duracion} mins | Precio Base: ₡
                   {servicio.precioBase}
-                </small>
+                </h6>
 
                 <div className="d-flex align-items-center mt-4">
                   <img
@@ -131,7 +178,7 @@ const ServicioList: React.FC = () => {
                     }}
                   />
                   <div className="ml-3">
-                    <h6 className="mb-0">{servicio.usuario.nombreUsuario}</h6>
+                    <h6 className="mb-0 text-light">{servicio.usuario.nombreUsuario}</h6>
                   </div>
                 </div>
                 {usuario && usuario.id === servicio.usuario.id && (
@@ -143,7 +190,7 @@ const ServicioList: React.FC = () => {
                       Actualizar Servicio
                     </button>
                     <button
-                      className="btn btn-danger mt-3 ml-2"
+                      className="btn btn-light mt-3 ml-2"
                       onClick={() => handleEliminarClick(servicio)}
                     >
                       Eliminar Servicio
@@ -156,7 +203,8 @@ const ServicioList: React.FC = () => {
         ))}
       </div>
       <div className="d-flex justify-content-center">
-        <Pagination>
+        <Pagination data-bs-theme="dark"
+        >
           {Array.from({ length: totalPages }, (_, index) => (
             <Pagination.Item
               key={index}
@@ -175,6 +223,7 @@ const ServicioList: React.FC = () => {
         />
       )}
 
+      {/* Modal para confirmar actualización */}
       <Dialog
         open={openConfirmDialog}
         onClose={handleCloseConfirmDialog}
@@ -195,6 +244,7 @@ const ServicioList: React.FC = () => {
         </DialogActions>
       </Dialog>
 
+      {/* Modal para confirmar eliminación */}
       <Dialog
         open={openDeleteConfirmDialog}
         onClose={handleCloseDeleteConfirmDialog}

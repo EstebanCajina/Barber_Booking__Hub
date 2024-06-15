@@ -112,8 +112,6 @@ const PeopleTable: React.FC<Props> = ({ users }: Props) => {
               <th>Número</th>
               <th>Nombre Usuario</th>
               <th>Cédula</th>
-              <th>Contraseña</th>
-              <th>Estado</th>
               <th>Admin</th>
               <th>Barbero</th>
               <th>Correo Electrónico</th>
@@ -127,8 +125,6 @@ const PeopleTable: React.FC<Props> = ({ users }: Props) => {
                 <td>{index + 1}</td>
                 <td>{user.nombreUsuario}</td>
                 <td>{user.cedula}</td>
-                <td>{user.contrasena}</td>
-                <td>{user.estado}</td>
                 <td>
                   <button
                     className={`btn btn-${user.admin === '1' ? 'success' : 'secondary'} btn-sm`}

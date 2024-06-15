@@ -26,10 +26,11 @@ const VistaServicios: React.FC = () => {
     }, []);
 
     return (
-        <div className="vista-servicios">
-            <h1 className="text-2xl font-semibold text-center text-gray-800 capitalize lg:text-3xl dark:text-white">
-                Servicios
-            </h1>
+        <div className="vista-servicios" style={{
+            backgroundColor: '#1a1a1a',
+            minHeight: '100vh',  // Ajusta el tamaño mínimo del contenedor si es necesario
+            padding: '20px',     // Añade un poco de espacio interno
+          }}>
             
             {usuario && usuario.barbero === '1' && (
                 <div className="mt-6 flex justify-center">
