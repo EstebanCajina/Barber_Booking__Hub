@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,9 +17,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+
 interface Props {
   user: Usuario;
 }
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -41,7 +43,14 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
   const [cedula, setCedula] = React.useState(user.cedula);
   const [correoElectronico, setCorreoElectronico] = React.useState(user.correoElectronico);
   const [numeroTelefono, setNumeroTelefono] = React.useState(user.numeroTelefono);
+  const [loggedInUser, setLoggedInUser] = useState<Usuario | null>(null);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setLoggedInUser(JSON.parse(storedUser) as Usuario);
+    }
+  }, []);
   const handleOpenDialog = (action: () => void) => {
     setDialogAction(() => action);
     setOpenDialog(true);
@@ -51,7 +60,52 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
     setOpenDialog(false);
   };
 
+  const validateFields = async () => {
+    // Validar campos no vacíos
+    if (!nombreUsuario || !cedula || !correoElectronico || !numeroTelefono) {
+      setErrorMessage('Todos los campos son obligatorios.');
+      return false;
+    }
+
+    // Validar correo electrónico
+    if (correoElectronico.trim() !== user.correoElectronico) {
+      try {
+        const correoResponse = await axios.post('http://localhost:1111/barber_shop_booking_hub/cuenta/verificarCorreo', null, {
+          params: { correo: correoElectronico }
+        });
+        if (correoResponse.data) {
+          setErrorMessage('El correo electrónico ya se encuentra registrado.');
+          return false;
+        }
+      } catch (error) {
+        console.error('Error verificando correo:', error);
+      }
+    }
+
+    // Validar cédula
+    if (cedula.trim() !== user.cedula) {
+      try {
+        const cedulaResponse = await axios.post('http://localhost:1111/barber_shop_booking_hub/cuenta/verificarCedula', null, {
+          params: { cedula: cedula }
+        });
+        if (cedulaResponse.data) {
+          setErrorMessage('La cédula ya se encuentra registrada.');
+          return false;
+        }
+      } catch (error) {
+        console.error('Error verificando cédula:', error);
+      }
+    }
+
+    setErrorMessage('');
+    return true;
+  };
+
   const handleSubmit = async () => {
+    if (!(await validateFields())) {
+      return;
+    }
+
     try {
       const id = user.id;
       const response = await axios.post(`http://localhost:1111/barber_shop_booking_hub/cuenta/actualizar?id=${id}`, {
@@ -61,8 +115,11 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
         numeroTelefono
       });
       console.log(response.data);
+      if(loggedInUser && loggedInUser.id === response.data.id){
       const updatedUser = response.data;
       localStorage.setItem('user', JSON.stringify(updatedUser));
+      console.log("se actualizó el localstorage")
+      }
       window.location.reload();
     } catch (error) {
       console.error('Error updating user:', error);
@@ -85,8 +142,12 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
       console.log(response.data);
       const imageUrl = response.data.url;
       setImageSuccessMessage('Imagen actualizada exitosamente.');
+      console.log("El id de la respuesta es: "+ response.data.id + " el id del usario logueado es: " + loggedInUser?.id)
+      if(loggedInUser && loggedInUser.id == response.data.id){
       const updatedUser = { ...user, imagen: imageUrl };
       localStorage.setItem('user', JSON.stringify(updatedUser));
+      console.log("se actualizó el localstorage")
+      }
       window.location.reload();
     } catch (error) {
       console.error('Error updating user image:', error);
@@ -260,7 +321,6 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
           <Typography component="h2" variant="h6" sx={{ mt: 4 }}>
             Cambia tu Contraseña
           </Typography>
-          
           {successMessage && (
             <Typography color="success" sx={{ mt: 1 }}>
               {successMessage}
@@ -334,4 +394,3 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
 }
 
 export default SignUp;
-

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./componentes/NavBar";
 import VistaUsuario from "./Usuario/VistaUsuario";
 import VistaServicios from "./VistaServicios";
@@ -9,7 +9,29 @@ import Registrar from "./Usuario/Registrarse";
 import VistaCuenta from "./Usuario/VistaCuenta";
 import Recuperacion from "./Usuario/Recuperacion";
 import { Usuario } from "./tipos/Usuario";
+import Footer from './Footer';
 
+const AppContent: React.FC<{ usuario: Usuario | null, handleLogout: () => void }> = ({ usuario, handleLogout }) => {
+  const location = useLocation();
+  const hideNavAndFooter = location.pathname === "/login" || location.pathname === "/registrarse";
+
+  return (
+    <>
+      {!hideNavAndFooter && <NavBar onLogout={handleLogout} />}
+      <Routes>
+        <Route path="/" element={<VistaPrincipal />} />
+        <Route path="/perfil" element={usuario ? <VistaUsuario /> : <Login />} />
+        <Route path="/servicios" element={<VistaServicios />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registrarse" element={<Registrar />} />
+        <Route path="/recuperacion" element={<Recuperacion />} />
+        <Route path="/cuenta" element={usuario ? <VistaCuenta /> : <Login />} />
+        {/* Otras rutas de tu aplicación */}
+      </Routes>
+       <Footer />
+    </>
+  );
+};
 
 const App: React.FC = () => {
   const [usuario, setUser] = useState<Usuario | null>(null);
@@ -29,17 +51,7 @@ const App: React.FC = () => {
 
   return (
     <Router basename="/">
-      <NavBar onLogout={handleLogout} />
-      <Routes>
-        <Route path="/" element={<VistaPrincipal />} />
-        <Route path="/perfil" element={usuario ? <VistaUsuario /> : <Login />} />
-        <Route path="/servicios" element={<VistaServicios/>}/>
-        <Route path="/login" element={<Login />} />
-        <Route path="/registrarse" element={<Registrar />} />
-        <Route path="/recuperacion" element={<Recuperacion />} />
-        <Route path="/cuenta" element={usuario ? <VistaCuenta /> : <Login />} />
-        {/* Otras rutas de tu aplicación */}
-      </Routes>
+      <AppContent usuario={usuario} handleLogout={handleLogout} />
     </Router>
   );
 };

@@ -156,6 +156,7 @@ export default function SignInSide() {
                     {"¿No tienes una cuenta? Inscríbete aquí"}
                   </Link>
                 </Grid>
+                
               </Grid>
             </Box>
           </Box>

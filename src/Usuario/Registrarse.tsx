@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper'; // Importa Paper
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-
 
 const SignUp: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -58,7 +55,26 @@ const SignUp: React.FC = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:1111/barber_shop_booking_hub/cuenta/registrar', formData);
+      // Verifica si el correo electrónico ya está registrado
+      let response = await axios.post('http://localhost:1111/barber_shop_booking_hub/cuenta/verificarCorreo', null, {
+        params: { correo: formData.correoElectronico }
+      });
+      if (response.data) {
+        setError('El correo electrónico ya se encuentra registrado.');
+        return;
+      }
+
+      // Verifica si la cédula ya está registrada
+      response = await axios.post('http://localhost:1111/barber_shop_booking_hub/cuenta/verificarCedula', null, {
+        params: { cedula: formData.cedula }
+      });
+      if (response.data) {
+        setError('La cédula ya se encuentra registrada.');
+        return;
+      }
+
+      // Registra al usuario
+      response = await axios.post('http://localhost:1111/barber_shop_booking_hub/cuenta/registrar', formData);
       
       console.log(response.data);
 
@@ -78,6 +94,7 @@ const SignUp: React.FC = () => {
 
     } catch (error) {
       console.error('Error registrando usuario:', error);
+      setError('Error al registrar el usuario. Inténtalo de nuevo más tarde.');
     }
   };
 

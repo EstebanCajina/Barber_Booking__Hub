@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import Footer from './Footer';
 
 function MainView() {
   return (
@@ -14,7 +15,7 @@ function MainView() {
           <h1 style={{ fontSize: '4rem', fontWeight: 'bold' }}>GUÁPILES POCOCÍ LIMÓN TODOS LOS DÍAS DE: 8AM - 6PM</h1>
         </div>
         <div style={{ position: 'absolute', bottom: '20%', left: '50%', transform: 'translateX(-50%)', textAlign: 'center' }}>
-          <h1 style={{ fontSize: '6rem', fontWeight: 'bold' }}>PREMIUM</h1>
+          <br />
           <h2 style={{ fontSize: '4rem' }}>BARBER BOOKING HUB</h2>
           <p style={{ fontSize: '1.5rem' }}>WHATSAPP: 8421 0243</p>
           <p style={{ fontSize: '1.5rem' }}>TELÉFONO: 4702 4498</p>
@@ -61,35 +62,7 @@ function MainView() {
           En la actualidad, American Crew es la marca líder en el cuidado del cabello profesional para hombres en el mundo. Los hombres y su barbería de confianza cuentan con la calidad de Crew para obtener lo último y lo mejor en productos para el cabello, el cuerpo, el afeitado y el peinado mediante más de 20 años mejorando la apariencia del hombre.
         </p>
       </div>
-
-      <footer style={{ backgroundColor: '#1a1a1a', color: 'white', padding: '2rem 0', textAlign: 'center' }}>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-4">
-              <h5>Contactanos</h5>
-              <p>Telefono: +506 2260-9777</p>
-              <p>Celular: +506 7023-1949</p>
-              <p>Email: hola@thebarberloungecr.com</p>
-            </div>
-            <div className="col-md-4">
-              <h5>Horarios de atención</h5>
-              <p>Lunes a miércoles: 10:00 AM a 8:00 PM</p>
-              <p>Jueves a sábado: 10:00 AM a 8:30 PM</p>
-              <p>Domingos: 10:00 AM a 6:00 PM</p>
-            </div>
-            <div className="col-md-4">
-              <h5>Nuestra ubicación</h5>
-              <p>San Francisco de Heredia, del BAC Credomatic 75m al Este. Mano derecha.</p>
-            </div>
-          </div>
-          <div className="social-icons" style={{ margin: '1rem 0' }}>
-            <a href="#"><i className="fab fa-facebook-f"></i></a>
-            <a href="#"><i className="fab fa-instagram"></i></a>
-            <a href="#"><i className="fab fa-tiktok"></i></a>
-          </div>
-          <p>© 2024, The Barber Lounge Costa Rica Creado por GonDi.solutions</p>
-        </div>
-      </footer>
+      
     </div>
   );
 }
