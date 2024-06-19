@@ -18,10 +18,10 @@ import ListarCitasBarbero from "./Citas/ListarCitasBarbero";
 import CitaActualizar from "./Citas/CitasActualizar";
 import Footer from './Footer';
 
+
 const AppContent: React.FC<{ usuario: Usuario | null, handleLogout: () => void }> = ({ usuario, handleLogout }) => {
   const location = useLocation();
   const hideNavAndFooter = location.pathname === "/login" || location.pathname === "/registrarse";
-
 
   const renderCitas = () => {
     if (usuario) {
