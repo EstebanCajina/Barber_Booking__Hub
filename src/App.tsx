@@ -10,6 +10,9 @@ import VistaCuenta from "./Usuario/VistaCuenta";
 import Recuperacion from "./Usuario/Recuperacion";
 import { Usuario } from "./tipos/Usuario";
 import Footer from './Footer';
+import MembresiasList from "./Membresias/MembresiaListar";
+import AgregarMembresia from "./Membresias/MembresiaAgregar";
+import ActualizarMembresia from "./Membresias/MembresiaActualizar";
 
 const AppContent: React.FC<{ usuario: Usuario | null, handleLogout: () => void }> = ({ usuario, handleLogout }) => {
   const location = useLocation();
@@ -26,6 +29,9 @@ const AppContent: React.FC<{ usuario: Usuario | null, handleLogout: () => void }
         <Route path="/registrarse" element={<Registrar />} />
         <Route path="/recuperacion" element={<Recuperacion />} />
         <Route path="/cuenta" element={usuario ? <VistaCuenta /> : <Login />} />
+        <Route path="/membresias" element={<MembresiasList />} />
+        <Route path="/agregar" element={<AgregarMembresia />} />
+        <Route path="/actualizar/:id" element={<ActualizarMembresia />} />
         {/* Otras rutas de tu aplicación */}
       </Routes>
        <Footer />
