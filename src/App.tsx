@@ -17,6 +17,9 @@ import ListarCitasCliente from "./Citas/ListarCitasCliente";
 import ListarCitasBarbero from "./Citas/ListarCitasBarbero";
 import CitaActualizar from "./Citas/CitasActualizar";
 import Footer from './Footer';
+import MembresiasList from "./Membresias/MembresiaListar";
+import AgregarMembresia from "./Membresias/MembresiaAgregar";
+import ActualizarMembresia from "./Membresias/MembresiaActualizar";
 
 
 const AppContent: React.FC<{ usuario: Usuario | null, handleLogout: () => void }> = ({ usuario, handleLogout }) => {
@@ -54,11 +57,15 @@ const AppContent: React.FC<{ usuario: Usuario | null, handleLogout: () => void }
         <Route path="/recuperacion" element={<Recuperacion />} />
         <Route path="/cuenta" element={usuario ? <VistaCuenta /> : <Login />} />
         <Route path="/productos" element={usuario ? <Productos user={usuario} /> :<Login />} />
-  <Route path="/productos/agregar" element={(usuario?.barbero ?? '') === '1' ? <AgregarProductos /> : <Login />} />
-<Route path="/productos/editar/:id" element={(usuario?.barbero ?? '') === '1' ? <EditarProductos /> : <Login />} />
-<Route path="/agendar Citas" element={usuario ? <AgregarCitas user={usuario} /> : <Login />} />
-<Route path="/actualizar-cita/:id" element={usuario ? <CitaActualizar user={usuario} /> : <Login />} />
-<Route path="/ver Citas" element={usuario ? renderCitas() :<Login />} />
+        <Route path="/productos/agregar" element={(usuario?.barbero ?? '') === '1' ? <AgregarProductos /> : <Login />} />
+        <Route path="/productos/editar/:id" element={(usuario?.barbero ?? '') === '1' ? <EditarProductos /> : <Login />} />
+        <Route path="/agendar Citas" element={usuario ? <AgregarCitas user={usuario} /> : <Login />} />
+        <Route path="/actualizar-cita/:id" element={usuario ? <CitaActualizar user={usuario} /> : <Login />} />
+        <Route path="/ver Citas" element={usuario ? renderCitas() :<Login />} />
+        <Route path="/membresias" element={<MembresiasList />} />
+        <Route path="/agregar" element={<AgregarMembresia />} />
+        <Route path="/actualizar/:id" element={<ActualizarMembresia />} />
+
 
         {/* Otras rutas de tu aplicación */}
       </Routes>
