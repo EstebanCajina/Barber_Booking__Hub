@@ -1,0 +1,56 @@
+.view-container {
+    background: #060606;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+
+  }
+  
+  .transparent-container {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    height: 100%;
+    max-width: 800px;
+    max-height: 1000px;
+    overflow: auto;
+  }
+  
+  h2 {
+    text-align: center;
+  }
+  
+  .modal-content {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+  }
+  
+
+
+  .table-custom {
+    background-color: #000; /* Fondo negro para la tabla */
+    color: #fff; /* Texto blanco para la tabla */
+  }
+  
+  .table-custom thead {
+    background-color: #333; /* Fondo gris oscuro para el encabezado */
+  }
+  
+  .table-custom tbody tr:nth-of-type(odd) {
+    background-color: #111; /* Fondo para filas impares */
+  }
+  
+  .table-custom tbody tr:hover {
+    background-color: #444; /* Fondo para fila al pasar el ratón */
+  }
+  
+  .table-custom td,
+  .table-custom th {
+    border-color: #555; /* Color del borde de las celdas */
+  }

@@ -1,0 +1,45 @@
+.appointment-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .appointment-card {
+    width: 400px;
+    background-color: #060606;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .appointment-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .date-picker-container {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #F44334;
+  }
+  
+  .submit-btn {
+    margin-top: 20px;
+  }
+  
+  /* Agrega más estilos según sea necesario */
+  .text {
+    color: #F44334; /* This will apply to all text elements */
+  }
+
+  .text2 {
+    color: #9AAEB8; /* This will apply to all text elements */
+  }
+
+  .text2 {
+    color: #9AAEB8; /* This will apply to all text elements */
+  }
+  

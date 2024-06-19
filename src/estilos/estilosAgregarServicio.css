@@ -1,0 +1,31 @@
+.input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.carousel-image {
+    height: 200px; /* El tamaño fijo que desees */
+    width: 100%; /* Para que se ajuste al contenedor */
+    object-fit: cover; /* Para que la imagen se ajuste sin deformarse */
+    border-radius: 5px;
+}
+
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

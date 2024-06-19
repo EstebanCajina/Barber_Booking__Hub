@@ -1,0 +1,46 @@
+.date-picker-container {
+    text-align: center;
+    margin-top: 20px;
+    color: #F44334;
+  }
+  
+  .date-picker-title {
+    font-size: 1.2rem;
+    color: #d61313;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  input[type="date"] {
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .time-selection {
+    margin-top: 20px;
+  }
+  
+  .time-selection-title {
+    font-size: 1.2rem;
+    color: #F44334;
+    margin-bottom: 10px;
+  }
+  
+  select {
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+  
+  p {
+    font-size: 1rem;
+    color: #555;
+    margin-top: 20px;
+  }
+  

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,14 +12,28 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Avatar from '@mui/material/Avatar';
 import { Link } from 'react-router-dom';
-import logo from './imagenes/Logo2.jpeg'; // Importa la imagen del logo
+import logo from '../imagenes/Logo2.jpeg'; // Importa la imagen del logo
+import { Usuario } from '../tipos/Usuario';
 
 const pages: string[] = ['Productos', 'Servicios', 'Membresias', 'Carrito de compras'];
-const settings: string[] = ['Perfil', 'Cuenta', 'Login', 'Cerrar sesión'];
+const settings: string[] = ['Perfil', 'Cuenta', 'Agendar citas','ver Citas','Cerrar sesión'];
+const loginSetting: string[] = ['Login'];
 
-function NavBar() {
-    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+interface NavBarProps {
+    onLogout: () => void;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ onLogout }) => {
+    const [user, setUser] = useState<Usuario | null>(null);
+    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -37,8 +51,13 @@ function NavBar() {
         setAnchorElUser(null);
     };
 
+    const handleLogout = () => {
+        handleCloseUserMenu();
+        onLogout();
+    };
+
     return (
-        <AppBar position="static" sx={{ background: 'linear-gradient(94deg, rgba(0,0,0,1) 0%, rgba(85,29,61,1) 55%, rgba(210,202,31,1) 100%)' }}>
+        <AppBar position="static" sx={{ background: ' linear-gradient(90deg, rgba(144,14,17,1) 0%, rgba(0,0,0,1) 20%, rgba(26,26,26,1) 80%, rgba(144,14,17,1) 100%)' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Avatar src={logo} alt="Logo" sx={{ display: { xs: 'none', md: 'flex' }, mr: 2, width: 65, height: 65 }} />
@@ -131,7 +150,10 @@ function NavBar() {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Abrir configuración del perfil">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" />
+                                <Avatar 
+                                    alt="User Image" 
+                                    src={user ? user.imagen : 'https://cdn-icons-png.flaticon.com/512/3135/3135768.png'} 
+                                />
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -150,9 +172,9 @@ function NavBar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <Link to={`/${setting}`} key={setting} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                    <MenuItem>
+                            {(user ? settings : loginSetting).map((setting) => (
+                                <Link to={`/${setting.toLowerCase()}`} key={setting} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                    <MenuItem onClick={setting === 'Cerrar sesión' ? handleLogout : handleCloseUserMenu}>
                                         <Typography textAlign="center">{setting}</Typography>
                                     </MenuItem>
                                 </Link>
