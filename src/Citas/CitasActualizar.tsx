@@ -218,10 +218,10 @@ const ActualizarCitas: React.FC<Props> = ({ user }) => {
     <div className="appointment-container" style={{ paddingTop: '370px', width: '100%' }}>
       <Card className="appointment-card" style={{ width: '100%' }}>
         <Card.Body>
-          <Card.Title className="appointment-title">Actualizar Cita</Card.Title>
+          <Card.Title className="text">Actualizar Cita</Card.Title>
           <Form onSubmit={handleGuardarCita} style={{ width: '100%' }}>
             {citaSeleccionada && (
-              <Form.Group className="mb-3" controlId="barberoSelect">
+              <Form.Group className="mb-3 text2" controlId="barberoSelect">
                 <Form.Label>Barbero:</Form.Label>
                 <Form.Control
                   type="text"
@@ -232,7 +232,7 @@ const ActualizarCitas: React.FC<Props> = ({ user }) => {
             )}
 
             {citaSeleccionada && (
-              <Form.Group controlId="servicioSelect">
+              <Form.Group className='text2' controlId="servicioSelect">
                 <Form.Label>Servicios:</Form.Label>
                 <Form.Control
                   as="select"
