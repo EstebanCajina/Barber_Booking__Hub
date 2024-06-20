@@ -88,7 +88,7 @@ class Productos extends Component<ProductosProps, ProductosState> {
 
   fetchProductos = () => {
     const { currentPage } = this.state;
-    axios.get(`http://localhost:1111/productos/listar?page=${currentPage - 1}&size=1`)
+    axios.get(`http://localhost:1111/productos/listar?page=${currentPage - 1}&size=5`)
       .then(response => {
         console.log('Datos recibidos del backend:', response.data);
         this.setState({ productos: response.data.content, totalPages: response.data.totalPages });
@@ -336,7 +336,7 @@ const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, cerrarProdu
           </Carousel>
         </div>
         <div style={{backgroundColor: '#1a1a1a', width:'100%', border: 'none'}}>
-        <p style={{ textAlign: 'center', color:'#9AAEB8', marginBottom: '10px' }}>Precio: ${producto.precio}</p>
+        <p style={{ textAlign: 'center', color:'#9AAEB8', marginBottom: '10px' }}>Precio: ₡{producto.precio}</p>
         <p style={{ textAlign: 'center', color:'#9AAEB8',marginBottom: '10px' }}>{producto.descripcion}</p>
         </div>
       </div>

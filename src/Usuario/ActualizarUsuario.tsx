@@ -108,17 +108,18 @@ const SignUp: React.FC<Props> = ({ user }: Props) => {
   
     try {
       const id = user.id;
-      const url = `http://localhost:1111/barber_shop_booking_hub/cuenta/actualizar?id=${id}&nombreUsuario=${nombreUsuario}&cedula=${cedula}&correoElectronico=${correoElectronico}&numeroTelefono=${numeroTelefono}`;
-      const response = await axios.post(url);
-  
+      const response = await axios.post(`http://localhost:1111/barber_shop_booking_hub/cuenta/actualizar?id=${id}`, {
+        nombreUsuario,
+        cedula,
+        correoElectronico,
+        numeroTelefono
+      });
       console.log(response.data);
-  
-      if (loggedInUser && loggedInUser.id === response.data.id) {
-        const updatedUser = response.data;
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        console.log("Se actualizó el localStorage");
+      if(loggedInUser && loggedInUser.id === response.data.id){
+      const updatedUser = response.data;
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      console.log("se actualizó el localstorage")
       }
-  
       window.location.reload();
     } catch (error) {
       console.error('Error updating user:', error);

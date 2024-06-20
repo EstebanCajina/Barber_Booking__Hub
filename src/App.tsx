@@ -20,6 +20,7 @@ import Footer from './Footer';
 import MembresiasList from "./Membresias/MembresiaListar";
 import AgregarMembresia from "./Membresias/MembresiaAgregar";
 import ActualizarMembresia from "./Membresias/MembresiaActualizar";
+import CarritoDeCompras from "./CarritoDeCompras/CarritoDeCompras";
 
 
 const AppContent: React.FC<{ usuario: Usuario | null, handleLogout: () => void }> = ({ usuario, handleLogout }) => {
@@ -47,9 +48,7 @@ const AppContent: React.FC<{ usuario: Usuario | null, handleLogout: () => void }
       {!hideNavAndFooter && <NavBar onLogout={handleLogout} />}
       <Routes>
 
-
-
-        <Route path="/" element={<VistaPrincipal />} />
+      <Route path="/" element={<VistaPrincipal />} />
         <Route path="/perfil" element={usuario ? <VistaUsuario /> : <Login />} />
         <Route path="/servicios" element={<VistaServicios />} />
         <Route path="/login" element={<Login />} />
@@ -62,9 +61,12 @@ const AppContent: React.FC<{ usuario: Usuario | null, handleLogout: () => void }
         <Route path="/agendar Citas" element={usuario ? <AgregarCitas user={usuario} /> : <Login />} />
         <Route path="/actualizar-cita/:id" element={usuario ? <CitaActualizar user={usuario} /> : <Login />} />
         <Route path="/ver Citas" element={usuario ? renderCitas() :<Login />} />
+
+
         <Route path="/membresias" element={<MembresiasList />} />
         <Route path="/agregar" element={<AgregarMembresia />} />
         <Route path="/actualizar/:id" element={<ActualizarMembresia />} />
+        <Route path="/carrito de compras/" element={<CarritoDeCompras />} />
 
 
         {/* Otras rutas de tu aplicación */}

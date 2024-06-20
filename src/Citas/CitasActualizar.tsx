@@ -215,7 +215,7 @@ const ActualizarCitas: React.FC<Props> = ({ user }) => {
   };
 
   return (
-    <div className="appointment-container" style={{ paddingTop: '370px', width: '100%' }}>
+    <div className="appointment-container" style={{ paddingTop: '115px', width: '100%' }}>
       <Card className="appointment-card" style={{ width: '100%' }}>
         <Card.Body>
           <Card.Title className="text">Actualizar Cita</Card.Title>
