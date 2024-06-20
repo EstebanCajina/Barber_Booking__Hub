@@ -184,7 +184,7 @@ const DatePicker: React.FC<Props> = ({
   };
 
   return (
-    <div className="date-picker" style={{ height: '400px' }}>
+    <div className="date-picker" style={{ height: '400px',color:'#F44334' }}>
       <h2 style={{ textAlign: 'center' }}>Selecciona una fecha y hora</h2>
       <Calendar
         localizer={localizer}
@@ -205,6 +205,10 @@ const DatePicker: React.FC<Props> = ({
         timeslots={12}
         min={startOfDay}
         max={endOfDay}
+        style={{
+          backgroundColor: 'white',
+          color: 'black',
+        }}
         eventPropGetter={(event) => {
           const backgroundColor = event.color;
           return { style: { backgroundColor } };

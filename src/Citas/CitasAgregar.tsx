@@ -217,7 +217,7 @@ const AgregarCitas: React.FC<Props> = ({ user }) => {
   };
 
   return (
-    <div className="appointment-container" style={{ paddingTop: '410px', width: '100%' }}>
+    <div className="appointment-container" style={{ paddingTop: '195px', width: '100%' }}>
     <Card className="appointment-card" style={{ width: '100%' }}>
     <Card.Body className="text">
     <Card.Title>Agendar Cita</Card.Title>
