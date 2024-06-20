@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 import logo from '../imagenes/Logo2.jpeg'; // Importa la imagen del logo
 import { Usuario } from '../tipos/Usuario';
 
-const pages: string[] = ['Productos', 'Servicios', 'Membresias', 'Carrito de compras,agregar'];
+const pages: string[] = ['Productos', 'Servicios', 'Membresias', 'Carrito de compras'];
 const settings: string[] = ['Perfil', 'Cuenta','agendar citas','ver citas', 'Cerrar sesión'];
 const loginSetting: string[] = ['Login'];
 
